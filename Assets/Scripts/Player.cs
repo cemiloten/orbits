@@ -4,15 +4,48 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+   private void OnEnable()
+   {
+       TouchManager.OnTouchStart += OnTouchStart;
+       TouchManager.OnTouchHold += OnTouchHold;
+       TouchManager.OnTouchMove += OnTouchMove;
+       TouchManager.OnTouchEnd += OnTouchEnd;
+   }
+
+   private void OnDisable()
+   {
+       TouchManager.OnTouchStart -= OnTouchStart;
+       TouchManager.OnTouchHold -= OnTouchHold;
+       TouchManager.OnTouchMove -= OnTouchMove;
+       TouchManager.OnTouchEnd -= OnTouchEnd;
+   }
+
+    private void Start()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTouchStart(TouchInfo touchInfo)
     {
-        
     }
+
+    private void OnTouchHold(TouchInfo touchInfo)
+    {
+    }
+
+    private void OnTouchMove(TouchInfo touchInfo)
+    {
+    }
+
+    private void OnTouchEnd(TouchInfo touchInfo)
+    {
+        Vector3 start = Camera.main.ScreenToWorldPoint(touchInfo.StartPosition);
+        Vector3 end = Camera.main.ScreenToWorldPoint(touchInfo.Position);
+        start.z = 0f;
+        end.z = 0f;
+        Debug.Log(start);
+        Debug.Log(end);
+        Debug.DrawLine(start, end, Color.red, 5f);
+    }
+
 }
