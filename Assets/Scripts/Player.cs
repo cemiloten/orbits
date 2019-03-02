@@ -43,8 +43,6 @@ public class Player : MonoBehaviour
         Vector3 end = Camera.main.ScreenToWorldPoint(touchInfo.Position);
         start.z = 0f;
         end.z = 0f;
-        Debug.Log(start);
-        Debug.Log(end);
         Debug.DrawLine(start, end, Color.red, 5f);
     }
 
