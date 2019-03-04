@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Mover
+public class Player : MonoBehaviour
 {
-    public new Camera camera;
-    public float speed = 2f;
-    public float fuel = 100f;
+    public LayerMask movementLayer;
 
     private Vector3 start = Vector3.zero;
     private Vector3 end = Vector3.zero;
@@ -36,28 +34,34 @@ public class Player : Mover
 
     private void Update()
     {
-        camera.transform.position = new Vector3(transform.position.x, 10f, transform.position.z);
-        if (velocity.magnitude > 0.01f)
-            transform.rotation = Quaternion.LookRotation(velocity);
+        // if (velocity.magnitude > 0.01f)
+        //     transform.rotation = Quaternion.LookRotation(velocity);
 
 #if UNITY_EDITOR
-
         if (Input.GetMouseButtonDown(0))
         {
-            start = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            start.y = 0f;
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25f, movementLayer))
+            {
+                start = hit.point;
+                Debug.LogFormat("start {0}", start);
+            }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            end = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            end.y = 0f;
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 25f, movementLayer))
+            {
+                end = hit.point;
+                Debug.LogFormat("end {0}", end);
+            }
             Move(start - end);
             Debug.DrawLine(start, end, Color.red, 2f);
         }
 #endif
 
-        Debug.DrawLine(transform.position, transform.position + velocity);
+        // Debug.DrawLine(transform.position, transform.position + velocity);
     }
 
     private void OnTouchStart(TouchInfo touchInfo) {}
@@ -78,16 +82,15 @@ public class Player : Mover
 
     private void Move(Vector3 direction)
     {
-        acceleration += direction * speed;
-        fuel -= direction.magnitude;
+        transform.position += new Vector3(direction.x, 0f, direction.z);
     }
 
     void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(20, 20, 800, 200));
-        GUILayout.Label(string.Format("Velocity: {0:0.##}", velocity.magnitude), style);
-        GUILayout.Label(string.Format("Acceleration: {0:0.##}", acceleration.magnitude), style);
-        GUILayout.Label(string.Format("Fuel: {0:0.##}", fuel), style);
-        GUILayout.EndArea();
+        // GUILayout.BeginArea(new Rect(20, 20, 800, 200));
+        // GUILayout.Label(string.Format("Velocity: {0:0.##}", velocity.magnitude), style);
+        // GUILayout.Label(string.Format("Acceleration: {0:0.##}", acceleration.magnitude), style);
+        // GUILayout.Label(string.Format("Fuel: {0:0.##}", fuel), style);
+        // GUILayout.EndArea();
     }
 }
