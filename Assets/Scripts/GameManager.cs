@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public float minAttractionDistance = 5f;
-    public float maxAttractionDistance = 5f;
-
     public static GameManager Instance { get; private set; }
 
     private void Awake()
@@ -17,9 +14,8 @@ public class GameManager : MonoBehaviour
             Destroy(this);
     }
 
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         TouchManager.Update();
     }
